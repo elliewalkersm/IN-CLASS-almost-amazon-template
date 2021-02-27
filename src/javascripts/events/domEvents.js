@@ -1,5 +1,5 @@
 import addBookForm from '../components/forms/addBookForm';
-import { createBook } from '../helpers/data/bookData';
+import { createBook, deleteBook } from '../helpers/data/bookData';
 import { showBooks } from '../components/books';
 import addAuthorForm from '../components/forms/addAuthorForm';
 import { showAuthors } from '../components/authors';
@@ -10,7 +10,8 @@ const domEvents = () => {
     // CLICK EVENT FOR DELETING A BOOK
     if (e.target.id.includes('delete-book')) {
       if (window.confirm('Want to delete?')) {
-        console.warn('CLICKED DELETE BOOK', e.target.id);
+        const firebaseKey = e.target.id.split('--')[1];
+        deleteBook(firebaseKey).then((booksArray) => showBooks(booksArray));
       }
     }
 

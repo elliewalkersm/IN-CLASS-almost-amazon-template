@@ -1,6 +1,6 @@
-// API CALLS
 import axios from 'axios';
 import firebaseConfig from '../auth/apiKeys';
+// API CALLS
 
 const dbUrl = firebaseConfig.databaseURL;
 
@@ -13,7 +13,18 @@ const getBooks = () => new Promise((resolve, reject) => {
 
 // DELETE BOOK
 // CREATE BOOK
+const createBook = (bookObject) => new Promise((resolve, reject) => {
+  axios.post(`${dbUrl}/books.json`, bookObject)
+    .then((response) => {
+      const body = { firebaseKey: response.data.key };
+      axios.patch(`${dbUrl}/books/${response.data.name}.json`, body)
+        .then(() => {
+          getBooks().then((booksArray) => resolve(booksArray));
+        });
+    }).catch((error) => reject(error));
+});
+
 // UPDATE BOOK
 // SEARCH BOOKS
 
-export default getBooks;
+export { getBooks, createBook };

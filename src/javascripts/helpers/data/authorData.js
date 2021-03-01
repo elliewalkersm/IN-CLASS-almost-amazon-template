@@ -16,6 +16,14 @@ const getAuthors = () => new Promise((resolve, reject) => {
       }
     }).catch((error) => reject(error));
 });
+
+const getFavoriteAuthors = () => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/authors.json?orderBy="favorite"&equalTo=true`)
+    .then((response) => {
+      const favoriteAuthorsArray = Object.values(response.data);
+      resolve(favoriteAuthorsArray);
+    }).catch((error) => reject(error));
+});
 // DELETE AUTHOR
 // CREATE AUTHOR
 const createAuthors = (authorsObject) => new Promise((resolve, reject) => {
@@ -32,4 +40,4 @@ const createAuthors = (authorsObject) => new Promise((resolve, reject) => {
 // UPDATE AUTHOR
 // SEARCH AUTHORS
 
-export { getAuthors, createAuthors };
+export { getAuthors, createAuthors, getFavoriteAuthors };

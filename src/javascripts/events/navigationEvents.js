@@ -1,3 +1,5 @@
+import firebase from 'firebase';
+import 'firebase/auth';
 import signOut from '../helpers/auth/signOut';
 import { getAuthors, getFavoriteAuthors } from '../helpers/data/authorData';
 import { getBooks, getSaleBooks } from '../helpers/data/bookData';
@@ -17,7 +19,7 @@ const navigationEvents = () => {
 
   // ALL BOOKS
   document.querySelector('#all-books').addEventListener('click', () => {
-    getBooks().then((booksArray) => showBooks(booksArray));
+    getBooks(firebase.auth().currentUser.uid).then((booksArray) => showBooks(booksArray));
   });
 
   // SEARCH

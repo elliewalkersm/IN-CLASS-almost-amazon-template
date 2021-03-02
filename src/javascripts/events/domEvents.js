@@ -1,3 +1,5 @@
+import firebase from 'firebase';
+import 'firebase/auth';
 import addBookForm from '../components/forms/addBookForm';
 import { createBook, deleteBook } from '../helpers/data/bookData';
 import { showBooks } from '../components/books';
@@ -23,7 +25,6 @@ const domEvents = () => {
 
     // CLICK EVENT FOR SUBMITTING FORM FOR ADDING A BOOK
     if (e.target.id.includes('submit-book')) {
-      console.warn('CLICKED SUBMIT BOOK', e.target.id);
       e.preventDefault();
       const bookObject = {
         title: document.querySelector('#title').value,
@@ -31,6 +32,7 @@ const domEvents = () => {
         price: document.querySelector('#price').value,
         sale: document.querySelector('#sale').checked,
         author_id: document.querySelector('#author').value,
+        uid: firebase.auth().currentUser.uid
       };
 
       createBook(bookObject).then((booksArray) => showBooks(booksArray));
@@ -67,6 +69,7 @@ const domEvents = () => {
       const authorObject = {
         first_name: document.querySelector('#first_name').value,
         last_name: document.querySelector('#last_name').value,
+        favorite: document.querySelector('#favorite').value
       };
 
       createAuthors(authorObject).then((authorArray) => showAuthors(authorArray));

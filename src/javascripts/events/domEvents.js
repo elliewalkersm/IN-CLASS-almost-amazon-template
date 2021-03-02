@@ -1,5 +1,3 @@
-import firebase from 'firebase';
-import 'firebase/auth';
 import addBookForm from '../components/forms/addBookForm';
 import { createBook, deleteBook } from '../helpers/data/bookData';
 import { showBooks } from '../components/books';
@@ -7,7 +5,7 @@ import addAuthorForm from '../components/forms/addAuthorForm';
 import { showAuthors } from '../components/authors';
 import { createAuthors, deleteAuthor } from '../helpers/data/authorData';
 
-const domEvents = () => {
+const domEvents = (userId) => {
   document.querySelector('body').addEventListener('click', (e) => {
     // CLICK EVENT FOR DELETING A BOOK
     if (e.target.id.includes('delete-book')) {
@@ -19,7 +17,6 @@ const domEvents = () => {
 
     // CLICK EVENT FOR SHOWING FORM FOR ADDING A BOOK
     if (e.target.id.includes('add-book-btn')) {
-      console.warn('CLICKED ADD BOOK BUTTON', e.target.id);
       addBookForm();
     }
 
@@ -32,10 +29,10 @@ const domEvents = () => {
         price: document.querySelector('#price').value,
         sale: document.querySelector('#sale').checked,
         author_id: document.querySelector('#author').value,
-        uid: firebase.auth().currentUser.uid
+        uid: userId
       };
 
-      createBook(bookObject).then((booksArray) => showBooks(booksArray));
+      createBook(bookObject, userId).then((booksArray) => showBooks(booksArray));
     }
 
     // CLICK EVENT FOR SHOWING MODAL FORM FOR ADDING A BOOK
@@ -58,21 +55,20 @@ const domEvents = () => {
 
     // ADD CLICK EVENT FOR SHOWING FORM FOR ADDING AN AUTHOR
     if (e.target.id.includes('add-author-btn')) {
-      console.warn('CLICKED ADD AUTHOR BUTTON', e.target.id);
       addAuthorForm();
     }
 
     // ADD CLICK EVENT FOR SUBMITTING FORM FOR ADDING AN AUTHOR
     if (e.target.id.includes('submit-author')) {
-      console.warn('CLICKED SUBMIT AUTHOR', e.target.id);
       e.preventDefault();
       const authorObject = {
         first_name: document.querySelector('#first_name').value,
         last_name: document.querySelector('#last_name').value,
-        favorite: document.querySelector('#favorite').value
+        favorite: document.querySelector('#favorite').checked,
+        uid: userId
       };
 
-      createAuthors(authorObject).then((authorArray) => showAuthors(authorArray));
+      createAuthors(authorObject, userId).then((authorArray) => showAuthors(authorArray));
     }
 
     // ADD CLICK EVENT FOR EDITING AN AUTHOR

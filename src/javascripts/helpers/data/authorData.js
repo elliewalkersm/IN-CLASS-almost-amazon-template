@@ -5,8 +5,8 @@ import firebaseConfig from '../auth/apiKeys';
 
 const dbUrl = firebaseConfig.databaseURL;
 // GET AUTHORS
-const getAuthors = () => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/authors.json`)
+const getAuthors = (userId) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/authors.json?orderBy="uid"&equalTo="${userId}"`)
     .then((response) => {
       if (response.data) {
         const authorArray = Object.values(response.data);
@@ -32,13 +32,13 @@ const deleteAuthor = (firebaseKey) => new Promise((resolve, reject) => {
 });
 
 // CREATE AUTHOR
-const createAuthors = (authorsObject) => new Promise((resolve, reject) => {
+const createAuthors = (authorsObject, userId) => new Promise((resolve, reject) => {
   axios.post(`${dbUrl}/authors.json`, authorsObject)
     .then((response) => {
       const body = { firebaseKey: response.data.key };
       axios.patch(`${dbUrl}/authors/${response.data.name}.json`, body)
         .then(() => {
-          getAuthors().then((authorsArray) => resolve(authorsArray));
+          getAuthors(userId).then((authorsArray) => resolve(authorsArray));
         });
     }).catch((error) => reject(error));
 });

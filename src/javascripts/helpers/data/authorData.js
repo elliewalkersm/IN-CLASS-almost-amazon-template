@@ -35,7 +35,7 @@ const deleteAuthor = (firebaseKey) => new Promise((resolve, reject) => {
 const createAuthors = (authorsObject, userId) => new Promise((resolve, reject) => {
   axios.post(`${dbUrl}/authors.json`, authorsObject)
     .then((response) => {
-      const body = { firebaseKey: response.data.key };
+      const body = { firebaseKey: response.data.name };
       axios.patch(`${dbUrl}/authors/${response.data.name}.json`, body)
         .then(() => {
           getAuthors(userId).then((authorsArray) => resolve(authorsArray));

@@ -22,9 +22,9 @@ const getSaleBooks = () => new Promise((resolve, reject) => {
 });
 
 // DELETE BOOK
-const deleteBook = (firebaseKey) => new Promise((resolve, reject) => {
+const deleteBook = (firebaseKey, userId) => new Promise((resolve, reject) => {
   axios.delete(`${dbUrl}/books/${firebaseKey}.json`)
-    .then(() => getBooks().then((booksArray) => resolve(booksArray)))
+    .then(() => getBooks(userId).then((booksArray) => resolve(booksArray)))
     .catch((error) => reject(error));
 });
 
@@ -56,6 +56,16 @@ const updateBook = (firebaseKey, bookObject) => new Promise((resolve, reject) =>
 
 // SEARCH BOOKS
 
+// GET ALL AUTHORS BOOKS
+const getAuthorBooks = (authorId) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/books.json?orderBy="author_id"&equalTo="${authorId}"`)
+    .then((response) => {
+      const authorBooksArray = Object.values(response.data);
+      resolve(authorBooksArray);
+    })
+    .catch((error) => reject(error));
+});
+
 export {
-  getBooks, createBook, deleteBook, getSaleBooks, getSingleBook, updateBook
+  getBooks, createBook, deleteBook, getSaleBooks, getSingleBook, updateBook, getAuthorBooks
 };
